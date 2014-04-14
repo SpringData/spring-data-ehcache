@@ -1,0 +1,1 @@
+http\://www.springdata.org/schema/ehcache=org.springdata.ehcache.config.xml.EhcacheNamespaceHandler

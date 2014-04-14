@@ -1,0 +1,27 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:ehcache="http://www.springdata.org/schema/ehcache"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util
+		http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springdata.org/schema/ehcache
+		http://www.springdata.org/schema/ehcache/spring-ehcache.xsd">
+
+    <context:annotation-config />
+    <context:component-scan base-package="org.springdata.ehcache.config.service" />
+	
+	<ehcache:cache-manager ehcache="src/test/resources/test-ehcache.xml" 
+	     license="#{systemProperties['TERRACOTTA_LICENSE_KEY']}" />
+    
+    <!-- Define Caches  -->
+  
+    <ehcache:cache id="TEST_CACHE" />
+
+    
+</beans>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns="http://www.springdata.org/schema/ehcache" 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:tool="http://www.springframework.org/schema/tool" 
+	targetNamespace="http://www.springdata.org/schema/ehcache" 
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+	
+	<xsd:import namespace="http://www.springframework.org/schema/tool" 
+		schemaLocation="http://www.springframework.org/schema/tool/spring-tool.xsd" />
+		
+	<xsd:annotation>
+		<xsd:documentation><![CDATA[
+Defines the configuration elements for the Ehcache support.
+    ]]></xsd:documentation>
+	</xsd:annotation>	
+	
+	<xsd:element name="cache-manager" type="cacheManagerType">
+		<xsd:annotation>
+			<xsd:documentation
+				source="org.springdata.ehcache.config.CacheManagerFactoryBean"><![CDATA[
+Defines a CacheManager instance.
+			]]></xsd:documentation>
+			<xsd:appinfo>
+				<tool:annotation>
+					<tool:exports type="net.sf.ehcache.CacheManager" />
+				</tool:annotation>
+			</xsd:appinfo>
+		</xsd:annotation>
+	</xsd:element>	
+	
+	<xsd:complexType name="cacheManagerType">
+		<xsd:attribute name="id" type="xsd:ID" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>
+					The bean name of the CacheManager definition (by default
+					"cache-manager")
+				</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="ehcache" type="xsd:string">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[
+Path of the ehcache.xml file.
+							]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="license" type="xsd:string">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[
+Path of the terracotta-license.key file.
+							]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>	
+	
+	<xsd:element name="cache" type="cacheType">
+		<xsd:annotation>
+			<xsd:documentation
+				source="org.springdata.ehcache.config.EhcacheLookupFactoryBean"><![CDATA[
+Defines a Ehcache instance.
+			]]></xsd:documentation>
+			<xsd:appinfo>
+				<tool:annotation>
+					<tool:exports type="net.sf.ehcache.Ehcache" />
+				</tool:annotation>
+			</xsd:appinfo>
+		</xsd:annotation>
+	</xsd:element>		
+	
+	<xsd:complexType name="cacheType">
+		<xsd:attribute name="id" type="xsd:ID" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>
+					The bean name of the cache definition (by default
+					same as name attribute)
+				</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="name" type="xsd:string">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[
+The cache name.
+							]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="cache-manager-ref" type="cacheManagerRef"
+			use="optional">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[
+The reference to a CacheManager instance. Will default to 'cache-manager'.
+                                        ]]>
+				</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>	
+	
+	<xsd:simpleType name="cacheManagerRef" final="union">
+		<xsd:annotation>
+			<xsd:appinfo>
+				<tool:annotation kind="ref">
+					<tool:assignable-to type="net.sf.ehcache.CacheManager" />
+				</tool:annotation>
+			</xsd:appinfo>
+		</xsd:annotation>
+		<xsd:union memberTypes="xsd:string" />
+	</xsd:simpleType>	
+	
+</xsd:schema>	

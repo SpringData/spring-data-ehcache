@@ -1,0 +1,4 @@
+# Tooling related information for the spring-ehcache namespace
+http\://www.springdata.org/schema/ehcache@name=Spring Ehcache Namespace
+http\://www.springdata.org/schema/ehcache@prefix=ehcache
+http\://www.springdata.org/schema/ehcache@icon=org/springdata/ehcache/config/spring-ehcache.gif

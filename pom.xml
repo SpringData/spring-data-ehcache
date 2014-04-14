@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.springdata</groupId>
+	<artifactId>spring-data-ehcache</artifactId>
+	<version>1.0.0.SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>Spring Data Ehcache</name>
+	<description>Spring Data Ehcache Module</description>
+	<url>http://www.springdata.org/ehcache</url>
+
+	<licenses>
+	  <license>
+	    <name>The Apache Software License, Version 2.0</name>
+	    <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+	    <distribution>repo</distribution>
+	  </license>
+	</licenses>
+	
+	<scm>
+	  <url>https://github.com/SpringData/spring-data-ehcache</url>
+	  <connection>scm:git:git@github.com:SpringData/spring-data-ehcache.git</connection>
+	  <developerConnection>scm:git:git@github.com:SpringData/spring-data-ehcache.git</developerConnection>
+	</scm>	  
+    
+    <issueManagement>
+      <system>GitHub</system>
+      <url>https://github.com/SpringData/spring-data-ehcache/issues</url>
+    </issueManagement>	  
+	  
+	<parent>
+	  <groupId>org.sonatype.oss</groupId>
+	  <artifactId>oss-parent</artifactId>
+	  <version>7</version>
+	</parent>
+
+	<properties>
+		<dist.id>spring-data-ehcache</dist.id>
+		<springdata.commons>1.6.5.RELEASE</springdata.commons>
+		
+		<apt>1.1.0</apt>
+		<aspectj>1.7.2</aspectj>
+		<cdi>1.0</cdi>
+		<hamcrest>1.3</hamcrest>
+		<jodatime>2.1</jodatime>
+		<junit>4.11</junit>
+		<logback>1.0.11</logback>
+		<mockito>1.9.5</mockito>
+		<querydsl>3.2.3</querydsl>
+		<slf4j>1.7.1</slf4j>
+		<spring>3.1.4.RELEASE</spring>
+		<webbeans>1.1.7</webbeans>
+	</properties>
+
+	<developers>
+		<developer>
+			<id>ashvid</id>
+			<name>Alex Shvid</name>
+			<roles>
+			    <role>Project Lead</role>
+				<role>Developer</role>
+			</roles>
+			<timezone>-8</timezone>
+		</developer>		
+	</developers>
+
+	<profiles>
+	
+		<profile>
+			<id>coverage</id>
+	
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>unpack-dependencies-src</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>unpack-dependencies</goal>
+								</goals>
+								<configuration>
+									<classifier>sources</classifier>
+									<includeGroupIds>org.springdata</includeGroupIds>
+									<outputDirectory>${project.build.directory}/generated-sources/it-dependencies</outputDirectory>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>build-helper-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>add-it-dep-source</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>add-source</goal>
+								</goals>
+								<configuration>
+									<sources>
+										<source>${project.build.directory}/generated-sources/it-dependencies</source>
+									</sources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+	
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>cobertura-it-maven-plugin</artifactId>
+						<version>2.5</version>
+						<configuration>
+							<formats>
+								<format>xml</format>
+							</formats>
+							<check>
+								<haltOnFailure>false</haltOnFailure>
+							</check>
+						</configuration>
+						<executions>
+							<execution>
+								<id>cobertura-clean</id>
+								<phase>clean</phase>
+								<goals>
+									<goal>clean</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>cobertura-instrument</id>
+								<phase>process-classes</phase>
+								<goals>
+									<goal>instrument</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>cobertura-check-only</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>check-only</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+	
+				</plugins>
+			</build>
+	
+			<reporting>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>cobertura-it-maven-plugin</artifactId>
+						<version>2.5</version>
+						<configuration>
+							<formats>
+								<format>html</format>
+								<format>xml</format>
+							</formats>
+						</configuration>
+						<reportSets>
+							<reportSet>
+								<reports>
+									<report>report-only</report>
+								</reports>
+							</reportSet>
+						</reportSets>
+					</plugin>
+				</plugins>
+			</reporting>
+		</profile>
+	
+	</profiles>
+
+	<dependencies>
+	
+		<!-- Spring -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${spring}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>${spring}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-expression</artifactId>
+			<version>${spring}</version>
+		</dependency>
+	
+		<!-- CDI -->
+		<dependency>
+			<groupId>javax.enterprise</groupId>
+			<artifactId>cdi-api</artifactId>
+			<version>${cdi}</version>
+			<scope>provided</scope>
+			<optional>true</optional>
+		</dependency>
+
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib-nodep</artifactId>
+			<version>2.2.2</version>
+			<scope>test</scope>
+		</dependency>
+	
+		<!-- ehcache -->
+		<dependency>
+			<groupId>net.sf.ehcache</groupId>
+			<artifactId>ehcache</artifactId>
+			<version>2.8.1</version>
+			<scope>provided</scope>
+		</dependency>			
+		
+		<!-- Spring Data -->
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-commons</artifactId>
+			<version>${springdata.commons}</version>
+		</dependency>		
+	
+		<!-- Test -->
+		<dependency>
+			<groupId>javax.el</groupId>
+			<artifactId>el-api</artifactId>
+			<version>${cdi}</version>
+			<scope>test</scope>
+		</dependency>		
+		
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit}</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring}</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<!-- Logging -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j}</version>
+			<scope>test</scope>
+		</dependency>	
+		
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.1.3</version>
+			<scope>test</scope>
+		</dependency>		
+
+	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>spring-lib-release</id>
+			<url>http://repo.springsource.org/libs-release-local</url>
+		</repository>
+	</repositories>
+    
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.2.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9.1</version>
+				<configuration>
+					<aggregate>true</aggregate>
+	                <author>true</author>
+	                <bottom>true</bottom>
+	                <destDir>target/javadoc</destDir>
+	                <packagenames>org.springdata.ehcache.*</packagenames>
+	                <use>true</use>
+	                <version>true</version>
+				</configuration>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.8</version>
+				<configuration>
+					<downloadSources>true</downloadSources>
+					<downloadJavadocs>true</downloadJavadocs>
+					<wtpversion>2.0</wtpversion>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.8</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.16</version>
+			</plugin>
+			<!--  
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>cobertura-maven-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<formats>
+					    <format>html</format>
+					    <format>xml</format>
+					</formats>
+					<instrumentation>
+						<ignores>
+							<ignore>org.springdata.cassandra.test.performance</ignore>
+						</ignores>
+						<excludes>
+							<exclude>**/test/performance/**/*.class</exclude>
+						</excludes>
+					</instrumentation>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>cobertura</goal>
+						</goals>
+					</execution>
+                    <execution>
+                        <id>cobertura-instrument</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>instrument</goal>
+                        </goals>
+                    </execution>					
+				</executions>
+			</plugin>
+			-->		
+		</plugins>
+	</build>
+  <!--  	
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>cobertura-maven-plugin</artifactId>
+        <version>2.6</version>
+      </plugin>
+    </plugins>
+  </reporting>
+  -->
+  
+  <pluginRepositories>
+    <pluginRepository>
+        <id>cobertura-it-maven-plugin-maven2-release</id>
+        <url>http://cobertura-it-maven-plugin.googlecode.com/svn/maven2/releases</url>
+        <snapshots>
+            <enabled>false</enabled>
+        </snapshots>
+        <releases>
+            <enabled>true</enabled>
+        </releases>
+    </pluginRepository>
+</pluginRepositories>
+
+</project>

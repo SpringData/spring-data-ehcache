@@ -1,0 +1,2 @@
+http\://www.springdata.org/schema/ehcache/spring-ehcache-1.0.xsd=org/springdata/ehcache/config/spring-ehcache-1.0.xsd
+http\://www.springdata.org/schema/ehcache/spring-ehcache.xsd=org/springdata/ehcache/config/spring-ehcache-1.0.xsd
