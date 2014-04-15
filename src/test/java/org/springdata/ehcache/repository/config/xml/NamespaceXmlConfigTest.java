@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package org.springdata.ehcache.config.java;
-
-import java.util.UUID;
+package org.springdata.ehcache.repository.config.xml;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springdata.ehcache.config.service.BasicService;
+import org.springdata.ehcache.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
@@ -35,31 +33,17 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = JavaConfig.class)
+@ContextConfiguration(locations = { "classpath:test-repo-namespace-context.xml" })
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
-public class JavaConfigTest {
+public class NamespaceXmlConfigTest {
 
 	@Autowired
-	private BasicService service;
+	private BookRepository bookRepository;
 
 	@Test
 	public void test() {
 
-		String key = UUID.randomUUID().toString();
-
-		byte[] value = "someValue".getBytes();
-
-		key = new String(key);
-
-		Assert.assertNull(service.get(key));
-
-		key = new String(key);
-
-		service.put(key, value);
-
-		key = new String(key);
-
-		Assert.assertEquals(value, service.get(key));
+		Assert.assertNotNull(bookRepository);
 
 	}
 

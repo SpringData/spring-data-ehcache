@@ -87,7 +87,7 @@ public class EhcacheMappingConverter extends AbstractEhcacheConverter implements
 	@Override
 	public <R> R read(Class<R> clazz, ByteArray source) {
 
-		if (source.getBytes() == null || source.getBytes().length == 0) {
+		if (source.isEmpty()) {
 			return null;
 		}
 

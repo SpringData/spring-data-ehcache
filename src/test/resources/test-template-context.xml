@@ -14,14 +14,12 @@
 		http://www.springdata.org/schema/ehcache/spring-ehcache-1.0.xsd">
 
     <context:annotation-config />
-    <context:component-scan base-package="org.springdata.ehcache.config.service" />
 	
 	<ehcache:cache-manager ehcache="src/test/resources/test-ehcache.xml" 
 	     license="#{systemProperties['TERRACOTTA_LICENSE_KEY']}" />
     
-    <!-- Define Caches  -->
-  
-    <ehcache:cache id="TEST_CACHE" />
-
+    <ehcache:converter />
+    
+    <ehcache:template />
     
 </beans>

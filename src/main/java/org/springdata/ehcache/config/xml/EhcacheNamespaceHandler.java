@@ -16,7 +16,10 @@
 
 package org.springdata.ehcache.config.xml;
 
+import org.springdata.ehcache.repository.config.EhcacheRepositoryConfigurationExtension;
 import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
+import org.springframework.data.repository.config.RepositoryBeanDefinitionParser;
+import org.springframework.data.repository.config.RepositoryConfigurationExtension;
 
 /**
  * Ehcache Namespace Handler
@@ -29,7 +32,13 @@ public class EhcacheNamespaceHandler extends NamespaceHandlerSupport {
 
 	public void init() {
 
+		RepositoryConfigurationExtension extension = new EhcacheRepositoryConfigurationExtension();
+		RepositoryBeanDefinitionParser repositoryBeanDefinitionParser = new RepositoryBeanDefinitionParser(extension);
+		registerBeanDefinitionParser(ConfigConstants.REPOSITORIES_ELEMENT, repositoryBeanDefinitionParser);
+
 		registerBeanDefinitionParser(ConfigConstants.CACHE_MANAGER_ELEMENT, new CacheManagerParser());
+		registerBeanDefinitionParser(ConfigConstants.CONVERTER_ELEMENT, new ConverterParser());
+		registerBeanDefinitionParser(ConfigConstants.TEMPLATE_ELEMENT, new TemplateParser());
 		registerBeanDefinitionParser(ConfigConstants.CACHE_ELEMENT, new CacheParser());
 
 	}

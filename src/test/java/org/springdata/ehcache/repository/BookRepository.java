@@ -14,28 +14,16 @@
  * limitations under the License.
  */
 
-package org.springdata.ehcache.config.xml;
+package org.springdata.ehcache.repository;
+
+import org.springdata.ehcache.core.Book;
 
 /**
- * Config Constants
  * 
  * @author Alex Shvid
  * 
  */
 
-public class ConfigConstants {
-
-	public static final String CACHE_MANAGER_DEFAULT_ID = "ehcache-manager";
-	public static final String CACHE_MANAGER_ELEMENT = "cache-manager";
-
-	public static final String TEMPLATE_DEFAULT_ID = "ehcache-template";
-	public static final String TEMPLATE_ELEMENT = "template";
-
-	public static final String CONVERTER_DEFAULT_ID = "ehcache-converter";
-	public static final String CONVERTER_ELEMENT = "converter";
-
-	public static final String CACHE_ELEMENT = "cache";
-
-	public static final String REPOSITORIES_ELEMENT = "repositories";
+public interface BookRepository extends EhcacheRepository<Book> {
 
 }

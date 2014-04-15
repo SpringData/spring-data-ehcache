@@ -41,15 +41,15 @@ public class EhcacheRepositoryFactoryBean<T extends Repository<S, String>, S> ex
 		return new EhcacheRepositoryFactory(ehcacheTemplate);
 	}
 
-	public void setCassandraTemplate(EhcacheTemplate ehcacheTemplate) {
+	public void setEhcacheTemplate(EhcacheTemplate ehcacheTemplate) {
 		this.ehcacheTemplate = ehcacheTemplate;
 		setMappingContext(ehcacheTemplate.getConverter().getMappingContext());
 	}
 
 	@Override
 	public void afterPropertiesSet() {
-		super.afterPropertiesSet();
 		Assert.notNull(ehcacheTemplate, "ehcacheTemplate must not be null!");
+		super.afterPropertiesSet();
 	}
 
 }

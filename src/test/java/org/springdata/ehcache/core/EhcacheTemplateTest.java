@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 
-package org.springdata.ehcache.config.java;
-
-import java.util.UUID;
+package org.springdata.ehcache.core;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springdata.ehcache.config.service.BasicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
@@ -35,32 +32,36 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = JavaConfig.class)
+@ContextConfiguration(locations = { "classpath:test-template-context.xml" })
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
-public class JavaConfigTest {
+public class EhcacheTemplateTest {
 
 	@Autowired
-	private BasicService service;
+	private EhcacheOperations ehcacheOperations;
 
 	@Test
-	public void test() {
+	public void testGetKey() {
 
-		String key = UUID.randomUUID().toString();
+		Book book = new Book(123, "alex", 100.0);
 
-		byte[] value = "someValue".getBytes();
+		String key = ehcacheOperations.getKey(book);
 
-		key = new String(key);
+		Assert.assertEquals("123", key);
 
-		Assert.assertNull(service.get(key));
+	}
 
-		key = new String(key);
+	@Test
+	public void testPutGet() {
 
-		service.put(key, value);
+		Book book = new Book(123, "alex", 100.0);
 
-		key = new String(key);
+		Assert.assertNull(ehcacheOperations.get(Book.class, "123"));
 
-		Assert.assertEquals(value, service.get(key));
+		ehcacheOperations.put(book);
 
+		Book stored = ehcacheOperations.get(Book.class, "123");
+
+		Assert.assertEquals(book, stored);
 	}
 
 }

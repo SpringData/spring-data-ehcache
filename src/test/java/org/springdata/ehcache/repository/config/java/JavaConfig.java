@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package org.springdata.ehcache.config.java;
+package org.springdata.ehcache.repository.config.java;
 
-import org.springdata.ehcache.config.EhcacheLookupFactoryBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
+import org.springdata.ehcache.config.java.AbstractEhcacheConfiguration;
+import org.springdata.ehcache.repository.config.EnableEhcacheRepositories;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -28,7 +27,7 @@ import org.springframework.context.annotation.Configuration;
  */
 
 @Configuration
-@ComponentScan("org.springdata.ehcache.config.service")
+@EnableEhcacheRepositories("org.springdata.ehcache.repository")
 public class JavaConfig extends AbstractEhcacheConfiguration {
 
 	@Override
@@ -39,11 +38,6 @@ public class JavaConfig extends AbstractEhcacheConfiguration {
 	@Override
 	public String terracottaLicenseFile() {
 		return System.getenv("TERRACOTTA_LICENSE_KEY");
-	}
-
-	@Bean(name = "TEST_CACHE")
-	public EhcacheLookupFactoryBean testCache() {
-		return lookupCache();
 	}
 
 }

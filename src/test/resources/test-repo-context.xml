@@ -1,0 +1,33 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util
+		http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:annotation-config />
+	
+    <bean id="cacheManager" class="org.springdata.ehcache.config.CacheManagerFactoryBean">
+        <property name="configFile" value="src/test/resources/test-ehcache.xml" />
+        <property name="terracottaLicenseFile" value="#{systemProperties['TERRACOTTA_LICENSE_KEY']}" />
+    </bean>
+    
+    <bean id="ehcacheConverter" class="org.springdata.ehcache.config.MappingConverterFactoryBean" />
+    
+    <bean id="ehcacheTemplate" class="org.springdata.ehcache.config.EhcacheTemplateFactoryBean" >
+    	<property name="cacheManager" ref="cacheManager" />
+    	<property name="ehcacheConverter" ref="ehcacheConverter" />
+    </bean>
+    
+    <bean id="bookRepository" class="org.springdata.ehcache.repository.config.EhcacheRepositoryFactoryBean" >
+         <property name="ehcacheTemplate" ref="ehcacheTemplate" />
+         <property name="repositoryInterface" value="org.springdata.ehcache.repository.BookRepository" />
+    </bean>
+        
+
+</beans>

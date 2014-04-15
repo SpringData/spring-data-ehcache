@@ -3,17 +3,28 @@
 <xsd:schema xmlns="http://www.springdata.org/schema/ehcache" 
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xmlns:tool="http://www.springframework.org/schema/tool" 
-	targetNamespace="http://www.springdata.org/schema/ehcache" 
+	xmlns:repository="http://www.springframework.org/schema/data/repository"
+	targetNamespace="http://www.springdata.org/schema/ehcache"
 	elementFormDefault="qualified" attributeFormDefault="unqualified">
-	
-	<xsd:import namespace="http://www.springframework.org/schema/tool" 
-		schemaLocation="http://www.springframework.org/schema/tool/spring-tool.xsd" />
 		
+	<xsd:import namespace="http://www.springframework.org/schema/data/repository"
+		schemaLocation="http://www.springframework.org/schema/data/repository/spring-repository.xsd" />	
+				
 	<xsd:annotation>
 		<xsd:documentation><![CDATA[
 Defines the configuration elements for the Ehcache support.
     ]]></xsd:documentation>
 	</xsd:annotation>	
+	
+	<xsd:element name="repositories">
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="repository:repositories">
+					<xsd:attributeGroup ref="repository:repository-attributes"/>
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>		
 	
 	<xsd:element name="cache-manager" type="cacheManagerType">
 		<xsd:annotation>
@@ -34,7 +45,7 @@ Defines a CacheManager instance.
 			<xsd:annotation>
 				<xsd:documentation>
 					The bean name of the CacheManager definition (by default
-					"cache-manager")
+					"ehcache-manager")
 				</xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
@@ -53,6 +64,85 @@ Path of the terracotta-license.key file.
 			</xsd:annotation>
 		</xsd:attribute>
 	</xsd:complexType>	
+	
+	<xsd:element name="template" type="templateType">
+		<xsd:annotation>
+			<xsd:documentation
+				source="org.springdata.ehcache.config.EhcacheTemplateFactoryBean"><![CDATA[
+Defines a EhcacheTemplate instance.
+			]]></xsd:documentation>
+			<xsd:appinfo>
+				<tool:annotation>
+					<tool:exports type="org.springdata.ehcache.core.EhcacheTemplate" />
+				</tool:annotation>
+			</xsd:appinfo>
+		</xsd:annotation>
+	</xsd:element>	
+	
+	<xsd:complexType name="templateType">
+		<xsd:attribute name="id" type="xsd:ID" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>
+					The bean name of the component status definition (by default
+					'ehcache-template')
+				</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="cache-manager-ref" type="cacheManagerRef"
+			use="optional">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[
+The reference to a CacheManager instance. Will default to 'ehcache-manager'.
+                                        ]]>
+				</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="cache-converter-ref" type="converterRef"
+			use="optional">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[
+The reference to a EhcacheConveter instance. Will default to 'ehcache-converter'.
+                                        ]]>
+				</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>		
+	</xsd:complexType>
+	
+	<xsd:simpleType name="converterRef" final="union">
+		<xsd:annotation>
+			<xsd:appinfo>
+				<tool:annotation kind="ref">
+					<tool:assignable-to type="org.springdata.ehcache.convert.EhcacheConverter" />
+				</tool:annotation>
+			</xsd:appinfo>
+		</xsd:annotation>
+		<xsd:union memberTypes="xsd:string" />
+	</xsd:simpleType>		
+	
+	<xsd:element name="converter" type="conveterType">
+		<xsd:annotation>
+			<xsd:documentation
+				source="org.springdata.ehcache.config.MappingConverterFactoryBean"><![CDATA[
+Defines a CacheConverter instance based on Protostuff serializer.
+			]]></xsd:documentation>
+			<xsd:appinfo>
+				<tool:annotation>
+					<tool:exports type="org.springdata.ehcache.convert.EhcacheConverter" />
+				</tool:annotation>
+			</xsd:appinfo>
+		</xsd:annotation>
+	</xsd:element>	
+	
+	<xsd:complexType name="conveterType">
+		<xsd:attribute name="id" type="xsd:ID" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>
+					The bean name of the EhcacheConveter definition (by default
+					'ehcache-converter')
+				</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>		
 	
 	<xsd:element name="cache" type="cacheType">
 		<xsd:annotation>

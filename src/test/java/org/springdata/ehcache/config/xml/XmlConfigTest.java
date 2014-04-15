@@ -28,6 +28,12 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+/**
+ * 
+ * @author Alex Shvid
+ * 
+ */
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:test-context.xml" })
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)

@@ -18,6 +18,9 @@ package org.springdata.ehcache.config.java;
 
 import org.springdata.ehcache.config.CacheManagerFactoryBean;
 import org.springdata.ehcache.config.EhcacheLookupFactoryBean;
+import org.springdata.ehcache.config.EhcacheTemplateFactoryBean;
+import org.springdata.ehcache.config.MappingConverterFactoryBean;
+import org.springdata.ehcache.config.xml.ConfigConstants;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -37,7 +40,7 @@ public abstract class AbstractEhcacheConfiguration {
 		return null;
 	}
 
-	@Bean
+	@Bean(name = ConfigConstants.CACHE_MANAGER_DEFAULT_ID)
 	public CacheManagerFactoryBean manager() {
 
 		CacheManagerFactoryBean bean = new CacheManagerFactoryBean();
@@ -45,6 +48,19 @@ public abstract class AbstractEhcacheConfiguration {
 		bean.setConfigFile(ehcacheFile());
 		bean.setTerracottaLicenseFile(terracottaLicenseFile());
 
+		return bean;
+	}
+
+	@Bean(name = ConfigConstants.CONVERTER_DEFAULT_ID)
+	public MappingConverterFactoryBean converter() {
+		return new MappingConverterFactoryBean();
+	}
+
+	@Bean(name = ConfigConstants.TEMPLATE_DEFAULT_ID)
+	public EhcacheTemplateFactoryBean template() {
+		EhcacheTemplateFactoryBean bean = new EhcacheTemplateFactoryBean();
+		bean.setCacheManager(manager().getObject());
+		bean.setEhcacheConverter(converter().getObject());
 		return bean;
 	}
 

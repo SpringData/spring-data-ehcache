@@ -60,11 +60,8 @@ public class CacheManagerFactoryBean implements FactoryBean<CacheManager>, Initi
 
 	@Override
 	public void destroy() {
-		if (cacheManager != null) {
-			logger.info("Destroying ehcache ...");
-			cacheManager.shutdown();
-			cacheManager = null;
-		}
+		logger.info("Destroying ehcache ...");
+		cacheManager.shutdown();
 	}
 
 	@Override

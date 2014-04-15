@@ -16,9 +16,9 @@
 
 package org.springdata.ehcache.repository.config;
 
+import org.springdata.ehcache.config.xml.ConfigConstants;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.core.annotation.AnnotationAttributes;
-import org.springframework.data.config.ParsingUtils;
 import org.springframework.data.repository.config.AnnotationRepositoryConfigurationSource;
 import org.springframework.data.repository.config.RepositoryConfigurationExtensionSupport;
 import org.springframework.data.repository.config.XmlRepositoryConfigurationSource;
@@ -34,7 +34,8 @@ import org.w3c.dom.Element;
 
 public class EhcacheRepositoryConfigurationExtension extends RepositoryConfigurationExtensionSupport {
 
-	private static final String CACHE_TEMPLATE_REF = "ehcache-template-ref";
+	private static final String XML_CACHE_TEMPLATE_REF = "template-ref";
+	private static final String JAVA_CACHE_TEMPLATE_REF = "ehcacheTemplateRef";
 
 	@Override
 	protected String getModulePrefix() {
@@ -49,8 +50,12 @@ public class EhcacheRepositoryConfigurationExtension extends RepositoryConfigura
 	public void postProcess(BeanDefinitionBuilder builder, XmlRepositoryConfigurationSource config) {
 
 		Element element = config.getElement();
+		String templateRef = element.getAttribute(XML_CACHE_TEMPLATE_REF);
 
-		ParsingUtils.setPropertyReference(builder, element, CACHE_TEMPLATE_REF, "ehcacheTemplate");
+		if (!StringUtils.hasText(templateRef)) {
+			templateRef = ConfigConstants.TEMPLATE_DEFAULT_ID;
+		}
+		builder.addPropertyReference("ehcacheTemplate", templateRef);
 
 	}
 
@@ -59,10 +64,12 @@ public class EhcacheRepositoryConfigurationExtension extends RepositoryConfigura
 
 		AnnotationAttributes attributes = config.getAttributes();
 
-		String ehcacheTemplateRef = attributes.getString("ehcacheTemplateRef");
-		if (StringUtils.hasText(ehcacheTemplateRef)) {
-			builder.addPropertyReference("ehcacheTemplate", ehcacheTemplateRef);
+		String templateRef = attributes.getString(JAVA_CACHE_TEMPLATE_REF);
+		if (!StringUtils.hasText(templateRef)) {
+			templateRef = ConfigConstants.TEMPLATE_DEFAULT_ID;
 		}
+
+		builder.addPropertyReference("ehcacheTemplate", templateRef);
 	}
 
 }
